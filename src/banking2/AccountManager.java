@@ -48,7 +48,7 @@ public class AccountManager {
 		case 2:
 			System.out.print("신용등급(A,B,C등급):");
 			String creditrating = sc.nextLine(); 
-			acct = new HighCreditAccount(accId,cusName,balance,debt,creditrating);
+			accountArr[accAccount++] = new HighCreditAccount(accId,cusName,balance,debt,creditrating);
 			break;
 		
 	
