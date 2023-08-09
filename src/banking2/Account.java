@@ -1,4 +1,5 @@
 package banking2;
+
 public class Account {
 	
 	private String accountNumber;//계좌번호
