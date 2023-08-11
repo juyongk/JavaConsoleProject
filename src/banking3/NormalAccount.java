@@ -2,18 +2,18 @@ package banking3;
 
 public class NormalAccount extends Account{
 
-	private int debt;
+	private double debt;
 
 	public NormalAccount(String accountNumber, String name, int balance, int debt) {
 		super(accountNumber, name, balance);
 		this.debt = debt;
 	}
 
-	public int getDebt() {
+	public double getDebt() {
 		return debt;
 	}
 
-	public void setDebt(int debt) {
+	public void setDebt(double debt) {
 		this.debt = debt;
 	}
 	
@@ -21,8 +21,10 @@ public class NormalAccount extends Account{
 	   
    @Override
    public boolean plusBalance(int money) {
-	  double dbt = debt * 0.01;
-      balance=(int)(balance+(balance*dbt)+money);
+//	  double dbt = debt * 0.01;
+	   int bal = super.getBalance();
+	   int sum = (int)(bal + bal*debt/100 + money);
+	   super.setBalance(sum);
       return true;
    }
 	@Override

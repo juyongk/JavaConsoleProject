@@ -1,10 +1,10 @@
 package banking3;
 
-public class Account {
+public abstract class Account {
 	
-	protected String accountNumber;//계좌번호
-	protected String name;//이름
-	protected int balance;//잔액
+	private String accountNumber;//계좌번호
+	private String name;//이름
+	private int balance;//잔액
 	
 	
 	public Account(String accountNumber, String name, int balance) {
