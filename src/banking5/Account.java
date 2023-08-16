@@ -1,54 +1,72 @@
 package banking5;
-
+import java.util.Objects;
 import java.io.Serializable;
 
-abstract class Account implements Serializable {
-	
-	private String accountNumber;//계좌번호
-	private String name;//이름
-	private int balance;//잔액
-	
-	public Account (){
-		
-	}
-	
-	public Account(String accountNumber, String name, int balance) {
-		this.accountNumber = accountNumber;
-		this.name = name;
-		this.balance = balance;
-	}
-	// 전체계좌정보출력
-	public void showAccInfo() {
-		System.out.println("----계좌정보출력----");
-		System.out.println("계좌번호:"+accountNumber);
-		System.out.println("고객이름:"+name);
-		System.out.println("잔고:"+balance);
-	}
-	public String getAccountNumber() {
-		return accountNumber;
-	}
-	public void setAccountNumber(String accountNumber) {
-		this.accountNumber = accountNumber;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public int getBalance() {
-		return balance;
-	}
-	public void setBalance(int balance) {
-		this.balance = balance;
-	}
-	
-	public boolean plusBalance(int money){
-		balance += money;
-		return true;
-	}
-	public boolean minusBalance(int money){
-		balance -= money;
-		return true;
-	}
+
+
+public abstract class Account implements Serializable {
+    private String accountNumber; // 계좌번호
+    private String customerName; // 예금주명
+    private int balance; // 잔액
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+    public void deposit(int amount) {
+        balance += amount;
+    }
+    
+    public int getBalance() {
+        return balance;
+    }
+    public void setBalance(int newBalance) {
+        balance = newBalance;
+    }
+
+    public void withdraw(int amount) {
+        if (amount > balance) {
+            System.out.println("잔액이 부족합니다.");
+        } else {
+            balance -= amount;
+        }
+    }
+    
+    public Account(String accountNumber, String customerName, int balance) {
+        this.accountNumber = accountNumber;
+        this.customerName = customerName;
+        this.balance = balance;
+    }
+
+    // 기존 메서드들...
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        Account other = (Account) obj;
+        return accountNumber.equals(other.accountNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountNumber);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("계좌번호: %s\n고객이름: %s\n잔고: %d\n", accountNumber, customerName, balance);
+    }
 }

@@ -1,7 +1,10 @@
 package banking5;
 
 public interface MenuChoice {
-
-	int make=1, deposit=2, withdraw =3, inquire=4, delete = 5, exit=6;
-	
+    int MAKE = 1;
+    int DEPOSIT = 2;
+    int WITHDRAW = 3;
+    int INQUIRE = 4;
+    int DELETE = 5;
+    int EXIT = 6;
 }

@@ -5,56 +5,46 @@ import java.util.Scanner;
 
 public class BankingSystemMain {
 
-	
-	public static void main(String[] args) throws MenuSelectException {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        AccountManager accountManager = new AccountManager();
 
-		   Scanner scan = new Scanner(System.in);
-		   
-		   AccountManager accMgr = new AccountManager();
-		      
-	         while (true) {
-	        	 
-	        	 accMgr.showMenu();
-	        	 
-	        	 try {
-	        		 int selNum = scan.nextInt();
-		         switch (selNum) {
-		         	case MenuChoice.make:
-		         		accMgr.makeAccount();
-		         		break;
-		         	case MenuChoice.deposit:
-		         		accMgr.depositMoney();
-		         		break;
-		         	case MenuChoice.withdraw:
-		         		accMgr.withdrawMoney();
-		         		break;
-		         	case MenuChoice.inquire:
-		         		accMgr.showAccInfo();
-		         		break;
-		         	case MenuChoice.delete:
-			        	accMgr.deleteAccount();
-			            break;
-		         	case MenuChoice.exit:
-		         		System.out.println("프로그램을 종료합니다.");
-		         		return;
-	         		default:
-	         			try {
-	         				String msg = "1~6사이의 값만 입력할 수 있습니다.";
-		   		    	    MenuSelectException ex = new MenuSelectException(msg);
-				    	    throw ex;
-	         			}
-				        catch(MenuSelectException e) {
-			        		 System.out.println(e.getMessage());
-				        }
-	         			
-	         }
-		         
-	     
-	         }
-	         catch(InputMismatchException e) {
-	        	 System.out.println("숫자를 입력하세요.");
-	        	 scan.nextLine();
-	        }
-	     }
-	}
+        while (true) {
+            accountManager.showMenu();
+
+            try {
+                System.out.print("선택하세요 : ");
+                int choice = sc.nextInt();
+
+                if (choice < MenuChoice.MAKE || choice > MenuChoice.EXIT) {
+                    throw new IllegalArgumentException("지정된 범위 외의 숫자 선택");
+                }
+
+                switch (choice) {
+                    case MenuChoice.MAKE:
+                        accountManager.makeAccount();
+                        break;
+                    case MenuChoice.DEPOSIT:
+                        accountManager.depositMoney();
+                        break;
+                    case MenuChoice.WITHDRAW:
+                        accountManager.withdrawMoney();
+                        break;
+                    case MenuChoice.INQUIRE:
+                        accountManager.showAccInfo();
+                        break;
+                    case MenuChoice.EXIT:
+                        System.out.println("프로그램을 종료합니다.");
+                        sc.close(); 
+                        System.exit(0);
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("문자 입력이 안됩니다. 정수를 입력해주세요.");
+                sc.nextLine();
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                sc.nextLine(); 
+            }
+        }
+    }
 }

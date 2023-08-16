@@ -1,56 +1,39 @@
 package banking5;
+import java.io.Serializable;
 
-public class HighCreditAccount extends Account{
+public class HighCreditAccount extends NormalAccount implements Serializable {
+    private char creditGrade;
+    private double creditInterestRate;
+    private double defaultInterestRate;
 
-	private double dbt;
-	private String creditrating;
-	
+    public HighCreditAccount(String accountNumber, String customerName, int initialBalance, double defaultInterestRate, char creditGrade) {
+        super(accountNumber, customerName, initialBalance, defaultInterestRate);
+        this.creditGrade = creditGrade;
+        this.defaultInterestRate = defaultInterestRate / 100;
 
-	public HighCreditAccount(String accountNumber, String name, int balance, int debt, String creditRating) {
-		super(accountNumber, name, balance);
-		this.dbt = (double)debt;
-		this.creditrating = creditRating;
-	}
-//
-	public double getDbt() {
-		return dbt;
-	}
+        switch (creditGrade) {
+            case 'A':
+                this.creditInterestRate = 0.07;
+                break;
+            case 'B':
+                this.creditInterestRate = 0.04;
+                break;
+            default:
+                this.creditInterestRate = 0.02;
+        }
+    }
 
-	public void setDbt(double dbt) {
-		this.dbt = dbt;
-	}
-
-	public String getCreditrating() {
-		return creditrating;
-	}
-
-	public void setCreditrating(String creditrating) {
-		this.creditrating = creditrating;
-	} 	
-	
-	@Override
-	public boolean plusBalance(int money) {
-		//double dbt = getDebt() * 0.01;
-		int bal = super.getBalance();
-		int sum = (int)(bal + bal*dbt/100 + bal*getGradeInt(creditrating)/100 + money);
-		super.setBalance(sum);
-		return true;
-	}
-	public int getGradeInt (String creditrating) {
-		switch (creditrating) {
-	      case "A":  case "a":
-	         return 7; 
-	      case "B":case "b":
-	         return 4; 
-	      case "C":case "c":
-	         return 2; 
-	      default: return 0;
-	      }
-	}
-	@Override
-	public void showAccInfo() {
-		super.showAccInfo();
-		System.out.println("기본이자 : " + (int)dbt + "%");
-		System.out.println("신용등급 : " + creditrating);
-	}
+    @Override
+    public void deposit(int amount) {
+        int interestAmount = (int) (getBalance() * defaultInterestRate);
+        int additionalInterestAmount = (int) (getBalance() * creditInterestRate);
+        int totalAmount = getBalance() + interestAmount + additionalInterestAmount + amount;
+        setBalance(totalAmount);
+    }
+    
+  
+    @Override
+    public String toString() {
+    	return String.format("계좌번호>%s\n고객이름>%s\n잔고>%d\n기본이자>%d%%\n신용등급>%c\n", getAccountNumber(), getCustomerName(), getBalance(), (int)(defaultInterestRate * 100), creditGrade);
+    }
 }

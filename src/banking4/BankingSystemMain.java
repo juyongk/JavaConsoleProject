@@ -1,60 +1,37 @@
 package banking4;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
+public class HighCreditAccount extends Account {
+    private int defaultInterestRate;
+    private char creditGrade;
+    private double creditInterestRate;
 
-public class BankingSystemMain {
+    public HighCreditAccount(String accountNumber, String customerName, int initialBalance, int defaultInterestRate, char creditGrade) {
+        super(accountNumber, customerName, initialBalance);
+        this.defaultInterestRate = defaultInterestRate;
+        this.creditGrade = Character.toUpperCase(creditGrade); // creditGrade를 대문자로 변경
 
-	
-	public static void main(String[] args) throws MenuSelectException {
+        switch (creditGrade) {
+            case 'A':
+                creditInterestRate = 0.07;
+                break;
+            case 'B':
+                creditInterestRate = 0.04;
+                break;
+            default:
+                creditInterestRate = 0.02;
+        }
+    }
 
-		   Scanner scan = new Scanner(System.in);
-		   
-		   AccountManager accMgr = new AccountManager();
-		      
-	         while (true) {
-	        	 
-	        	 accMgr.showMenu();
-	        	 
-	        	 try {
-	        		 int selNum = scan.nextInt();
-		         switch (selNum) {
-		         	case MenuChoice.make:
-		         		accMgr.makeAccount();
-		         		break;
-		         	case MenuChoice.deposit:
-		         		accMgr.depositMoney();
-		         		break;
-		         	case MenuChoice.withdraw:
-		         		accMgr.withdrawMoney();
-		         		break;
-		         	case MenuChoice.inquire:
-		         		accMgr.showAccInfo();
-		         		break;
-		         	case MenuChoice.delete:
-			        	accMgr.deleteAccount();
-			            break;
-		         	case MenuChoice.exit:
-		         		System.out.println("프로그램을 종료합니다.");
-		         		return;
-	         		default:
-	         			try {
-	         				String msg = "1~6사이의 값만 입력할 수 있습니다.";
-		   		    	    MenuSelectException ex = new MenuSelectException(msg);
-				    	    throw ex;
-	         			}
-				        catch(MenuSelectException e) {
-			        		 System.out.println(e.getMessage());
-				        }
-	         			
-	         }
-		         
-	     
-	         }
-	         catch(InputMismatchException e) {
-	        	 System.out.println("숫자를 입력하세요.");
-	        	 scan.nextLine();
-	        }
-	     }
-	}
+    @Override
+    public void deposit(int amount) {
+        int interest = (int) (getBalance() * defaultInterestRate);
+        int additionalInterest = (int) (getBalance() * creditInterestRate);
+        setBalance(getBalance() + interest + additionalInterest + amount);
+    }
+    
+  
+    @Override
+    public String toString() {
+        return String.format("고객이름>%s\n잔고>%d\n기본이자>%d%%\n신용등급>%c\n", getCustomerName(), getBalance(), defaultInterestRate, creditGrade);
+    }
 }

@@ -1,36 +1,32 @@
 package banking5;
+import java.io.Serializable;
 
-public class NormalAccount extends Account{
+public class NormalAccount extends Account implements Serializable {
+    private double interestRate;
 
-	private double debt;
+    public NormalAccount(String accountNumber, String name, int balance, double interestRatePercent) {
+        super(accountNumber, name, balance);
+        this.interestRate = interestRatePercent / 100; // 백분율을 소수로 변환
+    }
 
-	public NormalAccount(String accountNumber, String name, int balance, int debt) {
-		super(accountNumber, name, balance);
-		this.debt = debt;
-	}
+    @Override
+    public void deposit(int amount) {
+        int interest = (int) (getBalance() * interestRate);
+        setBalance(getBalance() + interest + amount);
+    }
 
-	public double getDebt() {
-		return debt;
-	}
+    // 출금 메서드 추가
+    public void withdraw(int amount) {
+        if (getBalance() >= amount) {
+            setBalance(getBalance() - amount);
+        } else {
+            System.out.println("잔고가 부족합니다.");
+        }
+    }
 
-	public void setDebt(double debt) {
-		this.debt = debt;
-	}
-	
-	
-	   
-   @Override
-   public boolean plusBalance(int money) {
-//	  double dbt = debt * 0.01;
-	   int bal = super.getBalance();
-	   int sum = (int)(bal + bal*debt/100 + money);
-	   super.setBalance(sum);
-      return true;
-   }
-	@Override
-	public void showAccInfo() {
-		super.showAccInfo();
-		System.out.println("기본이자 : " + debt + "%");
-	}
-	
+    // toString 메서드 수정
+    @Override
+    public String toString() {
+        return String.format("계좌번호: %s\n고객이름: %s\n잔고: %d\n기본이자>%.0f%%\n", getAccountNumber(), getCustomerName(), getBalance(), interestRate * 100);
+    }
 }
